@@ -203,8 +203,7 @@ char* get_fone(char *st)
         get_fone(st);
     }
     else if (strlen(fone) != 11)
-    {
-        printf("tam %d ",strlen(fone));
+    {        
         printf("Telefone inválido: Número de dígitos: %d \n", strlen(fone));
         printf("O númeor deve conter 11 dígitos, por ex: (45) 9 1234-5678.\n");       
         get_cpf(st);
@@ -257,47 +256,39 @@ char* get_comorbidade(char *st)
 {
     int c;
     printf(st);
-    scanf("%d", &c);    
-    fflush(stdin);
+    scanf("%1d", &c);
 
-    if (c > 0 && c < 7)
+    switch (c)
     {
-        switch (c)
-        {
-        case 1:
-            return "diabetes";
-            break;
+    case 1:
+        return "diabetes";
+        break;
 
-        case 2:
-            return "obesidade";
-            break;
+    case 2:
+        return "obesidade";
+        break;
 
-        case 3:
-            return "hipertensão";
-            break;
+    case 3:
+        return "hipertensão";
+        break;
 
-        case 4:
-            return "tuberculose";
-            break;
+    case 4:
+        return "tuberculose";
+        break;
 
-        case 5:
-            return "outros;";
-            break;
+    case 5:
+        return "outros;";
+        break;
 
-        case 6:
-            return "não";
-            break;
+    case 6:
+        return "não";
+        break;
     
-        default:
-            break;
-        }
-    }
-    else
-    {
-        printf("Opcão inválida.");
+    default:
+        printf("Opcão inválida.\n");
         get_comorbidade(st);
+        break;
     }
-    
 }
 
 char* get_cep(char *st)
@@ -412,19 +403,35 @@ void salva_cadastro(Paciente* p, const char *cadastro, const char *grisco)
     fclose(cad);
 }
 
+int criar_cadastro(char *st)
+{
+    char *n_c = get_string(st);
+    if (strcmp(n_c, "y") == 0)
+    { 
+        Paciente *nc = novo_cadastro();
+        salva_cadastro(nc, cadastro, grupo_risco);
+        printf("Cadastro salvo com sucesso!.\n");        
+        criar_cadastro(st);
+    }
+    else if (strcmp(n_c, "n") == 0)
+    {   
+        printf("Fechando programa...\n");
+        return 0;
+    }
+    else
+    {
+        printf("Dígito inválido. Digite 'y' para sim ou 'n' para não.\n");
+        criar_cadastro(st);
+    }   
+}
+
 int main(void)
 {
-   
+    printf("======================================\n");
+    printf("=========CADASTRO DE PACIENTE=========\n");
+    printf("======================================\n");
     
-    char *n_c = get_string("Novo cadastro?: y\n");
-   
-    if (strcmp(n_c, "y") != 0)
-    { return 0; }
+    criar_cadastro("Novo cadastro? (y/n): \n");
 
-    Paciente *nc = novo_cadastro();
-    salva_cadastro(nc, cadastro, grupo_risco);
-    //char* datt = get_date("data");
-   // printf("\n testandoMAIN \n");
-    //printf("test%s",datt);    */
     return 0;
-}
+    }
